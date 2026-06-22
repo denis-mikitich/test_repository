@@ -7,18 +7,13 @@ variables:
   REGISTRY_URL: http://192.168.31.86:5050
   HELM_CHART: ./helm-chart
   NAMESPACE: default
-  DOCKER_OPTS: "--insecure-registry=192.168.31.86:5050"
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_DRIVER: overlay2
-#  CI_REGISTRY: 192.168.31.86:5050
-#  CI_REGISTRY_IMAGE: 192.168.31.86:5050/root/my-app
 
 before_script:
   - apk add --no-cache curl git docker
-#  - mkdir -p /etc/docker
-#  - echo '{"insecure-registries":["192.168.31.86:5050"]}' > /etc/docker/daemon.json
-#  - dockerd --config-file /etc/docker/daemon.json &
-#  - sleep 5
+  - mkdir -p /etc/docker
+  - echo '{"insecure-registries":["192.168.31.86:5050"]}' > /etc/docker/daemon.json
+  - dockerd --config-file /etc/docker/daemon.json &
+  - sleep 5
 #  - docker login $REGISTRY -u root -p $CI_REGISTRY_PASSWORD
   - curl -LO "https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl"
   - chmod +x kubectl && mv kubectl /usr/local/bin/
@@ -31,19 +26,19 @@ build-backend:
   tags:
     - k8s
   image: docker:latest
-  services:
-    - name: docker:20.10.16-dind
-      command: ["--insecure-registry=192.168.31.86:5050"]
-  before_script: []
+#  services:
+#    - name: docker:20.10.16-dind
+#      command: ["--insecure-registry=192.168.31.86:5050"]
+#  before_script: []
 #  variables:
 #    DOCKER_HOST: tcp://docker:2375
 #    DOCKER_DRIVER: overlay2
   script:
     - docker login $REGISTRY_URL -u root -p $CI_REGISTRY_PASSWORD
-    - docker build -t $REGISTRY_URL/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA -f backend/Dockerfile ./backend
-    - docker tag $REGISTRY_URL/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA $REGISTRY_URL/$CI_PROJECT_PATH:backend-latest
-    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA
-    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:backend-latest
+    - docker build -t $REGISTRY/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA -f backend/Dockerfile ./backend
+    - docker tag $REGISTRY/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA $REGISTRY/$CI_PROJECT_PATH:backend-latest
+    - docker push $REGISTRY/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA
+    - docker push $REGISTRY/$CI_PROJECT_PATH:backend-latest
   rules:
     - changes:
         - backend/**/*
@@ -54,19 +49,19 @@ build-frontend:
   tags:
     - k8s
   image: docker:latest
-  services:
-    - name: docker:20.10.16-dind
-      command: ["--insecure-registry=192.168.31.86:5050"]
-  before_script: []
+#  services:
+#    - name: docker:20.10.16-dind
+#      command: ["--insecure-registry=192.168.31.86:5050"]
+#  before_script: []
 #  variables:
 #    DOCKER_HOST: tcp://docker:2375
 #    DOCKER_DRIVER: overlay2
   script:
     - docker login $REGISTRY_URL -u root -p $CI_REGISTRY_PASSWORD
-    - docker build -t $REGISTRY_URL/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA -f frontend/Dockerfile ./frontend
-    - docker tag $REGISTRY_URL/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA $REGISTRY_URL/$CI_PROJECT_PATH:frontend-latest
-    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA
-    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:frontend-latest
+    - docker build -t $REGISTRY/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA -f frontend/Dockerfile ./frontend
+    - docker tag $REGISTRY/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA $REGISTRY/$CI_PROJECT_PATH:frontend-latest
+    - docker push $REGISTRY/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA
+    - docker push $REGISTRY/$CI_PROJECT_PATH:frontend-latest
   rules:
     - changes:
         - frontend/**/*
