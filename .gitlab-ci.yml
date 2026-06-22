@@ -9,6 +9,8 @@ variables:
   NAMESPACE: default
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
+  CI_REGISTRY: 192.168.31.86:5050
+  CI_REGISTRY_IMAGE: 192.168.31.86:5050/root/my-app
 
 before_script:
   - apk add --no-cache curl git docker
@@ -36,10 +38,10 @@ build-backend:
 #    DOCKER_DRIVER: overlay2
   script:
     - docker login $REGISTRY_URL -u root -p $CI_REGISTRY_PASSWORD
-    - docker build -t $REGISTRY/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA -f backend/Dockerfile ./backend
-    - docker tag $REGISTRY/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA $REGISTRY/$CI_PROJECT_PATH:backend-latest
-    - docker push $REGISTRY/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA
-    - docker push $REGISTRY/$CI_PROJECT_PATH:backend-latest
+    - docker build -t $REGISTRY_URL/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA -f backend/Dockerfile ./backend
+    - docker tag $REGISTRY_URL/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA $REGISTRY_URL/$CI_PROJECT_PATH:backend-latest
+    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:backend-$CI_COMMIT_SHA
+    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:backend-latest
   rules:
     - changes:
         - backend/**/*
@@ -58,10 +60,10 @@ build-frontend:
 #    DOCKER_DRIVER: overlay2
   script:
     - docker login $REGISTRY_URL -u root -p $CI_REGISTRY_PASSWORD
-    - docker build -t $REGISTRY/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA -f frontend/Dockerfile ./frontend
-    - docker tag $REGISTRY/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA $REGISTRY/$CI_PROJECT_PATH:frontend-latest
-    - docker push $REGISTRY/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA
-    - docker push $REGISTRY/$CI_PROJECT_PATH:frontend-latest
+    - docker build -t $REGISTRY_URL/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA -f frontend/Dockerfile ./frontend
+    - docker tag $REGISTRY_URL/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA $REGISTRY_URL/$CI_PROJECT_PATH:frontend-latest
+    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:frontend-$CI_COMMIT_SHA
+    - docker push $REGISTRY_URL/$CI_PROJECT_PATH:frontend-latest
   rules:
     - changes:
         - frontend/**/*
@@ -74,9 +76,9 @@ deploy:
   image: alpine/helm:3.12.0
   script:
     - helm upgrade --install my-app $HELM_CHART
-        --set backend.image.repository=$REGISTRY/$CI_PROJECT_PATH
+        --set backend.image.repository=$REGISTRY_URL/$CI_PROJECT_PATH
         --set backend.image.tag=backend-$CI_COMMIT_SHA
-        --set frontend.image.repository=$REGISTRY/$CI_PROJECT_PATH
+        --set frontend.image.repository=$REGISTRY_URL/$CI_PROJECT_PATH
         --set frontend.image.tag=frontend-$CI_COMMIT_SHA
         --namespace $NAMESPACE
   rules:
