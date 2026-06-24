@@ -1,10 +1,11 @@
 replicaCount: 1
-
+imagePullSecrets:
+  - name: gitlab-registry
 backend:
   image:
-    repository: my-backend
-    tag: v1
-    pullPolicy: IfNotPresent
+    repository: 192.168.31.86:5050/root/my-app
+    tag: backend-latest
+    pullPolicy: Always
   service:
     port: 8081
     targetPort: 8081
@@ -24,13 +25,13 @@ backend:
 
 frontend:
   image:
-    repository: my-frontend
-    tag: v1
-    pullPolicy: IfNotPresent
+    repository: 192.168.31.86:5050/root/my-app
+    tag: frontend-latest
+    pullPolicy: Always
   service:
     port: 80
     targetPort: 80
   ingress:
     host: app.local
-    backendHost: backend-backend-svc
+    backendHost: my-app-backend-svc
     backendPort: 8081

@@ -1,0 +1,9 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: Runner
+metadata:
+  name: github-runner
+  namespace: default
+spec:
+  repository: "denis-mikitich/test_repository"
+  env: []
+  volumeMounts: []

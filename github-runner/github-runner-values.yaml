@@ -1,0 +1,16 @@
+githubUrl: https://github.com
+runnerToken: "CBROOZOH6KXUGD7P33TFXI3KHPF3C"
+repository: "denis-mikitich/test_repository"
+
+runners:
+  config: |
+    [[runners]]
+      name = "k8s-runner"
+      executor = "kubernetes"
+      [runners.kubernetes]
+        namespace = "default"
+        image = "docker:latest"
+        privileged = true
+        service_account = "gitlab-runner-sa"
+        [runners.kubernetes.pod]
+          security_context = { run_as_user = 1000 }
