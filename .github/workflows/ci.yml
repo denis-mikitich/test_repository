@@ -27,7 +27,7 @@ jobs:
       - name: Log in to Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.REGISTRY_URL }}
           username: root
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
@@ -52,7 +52,7 @@ jobs:
       - name: Log in to Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.REGISTRY_URL }}
           username: root
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
