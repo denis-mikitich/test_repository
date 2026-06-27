@@ -1,11 +1,14 @@
 replicaCount: 1
 imagePullSecrets:
-  - name: gitlab-registry
+#  - name: gitlab-registry
+  - name: ghcr-secret
 backend:
   image:
-    repository: 192.168.31.86:5050/root/my-app
-    tag: backend-latest
-    pullPolicy: Always
+#    repository: 192.168.31.86:5050/root/my-app
+    repository: ghcr.io/denis-mikitich/my-app-backend
+#    tag: backend-latest
+    tag: latest
+    pullPolicy: IfNotPresent
   service:
     port: 8081
     targetPort: 8081
@@ -25,9 +28,11 @@ backend:
 
 frontend:
   image:
-    repository: 192.168.31.86:5050/root/my-app
-    tag: frontend-latest
-    pullPolicy: Always
+#    repository: 192.168.31.86:5050/root/my-app
+    repository: ghcr.io/denis-mikitich/my-app-frontend
+#    tag: frontend-latest
+    tag: latest
+    pullPolicy: IfNotPresent
   service:
     port: 80
     targetPort: 80

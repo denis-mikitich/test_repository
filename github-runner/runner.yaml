@@ -5,5 +5,7 @@ metadata:
   namespace: default
 spec:
   repository: "denis-mikitich/test_repository"
-  env: []
+  env:
+    - name: DOCKER_OPTS
+      value: "--insecure-registry=192.168.31.86:5050"
   volumeMounts: []
