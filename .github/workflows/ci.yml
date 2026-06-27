@@ -8,10 +8,13 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 env:
-  REGISTRY: 192.168.31.86:5050
-  REGISTRY_URL: http://192.168.31.86:5050
+#  REGISTRY: 192.168.31.86:5050
+  REGISTRY: ghcr.io
+#  REGISTRY_URL: http://192.168.31.86:5050
+  REGISTRY_URL: https://ghcr.io
   HELM_CHART: ./helm-chart
   NAMESPACE: default
 
@@ -24,9 +27,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Registry
+      - name: Log in to GHCR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $REGISTRY_URL -u root --password-stdin
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
 
       - name: Build and push Backend
         uses: docker/build-push-action@v5
@@ -35,8 +38,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/root/my-app:backend-${{ github.sha }}
-            ${{ env.REGISTRY }}/root/my-app:backend-latest
+            ${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/my-app-backend:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/my-app-backend:latest
 
   build-frontend:
     runs-on: [self-hosted, linux, x64]
@@ -46,9 +49,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Registry
+      - name: Log in to GHCR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $REGISTRY_URL -u root --password-stdin
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
 
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
@@ -57,8 +60,8 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/root/my-app:frontend-${{ github.sha }}
-            ${{ env.REGISTRY }}/root/my-app:frontend-latest
+            ${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/my-app-frontend:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/my-app-frontend:latest
 
   deploy:
     runs-on: [self-hosted, linux, x64]
@@ -76,8 +79,8 @@ jobs:
       - name: Deploy with Helm
         run: |
           helm upgrade --install my-app $HELM_CHART \
-            --set backend.image.repository=$REGISTRY/root/my-app \
-            --set backend.image.tag=backend-${{ github.sha }} \
-            --set frontend.image.repository=$REGISTRY/root/my-app \
-            --set frontend.image.tag=frontend-${{ github.sha }} \
+            --set backend.image.repository=$REGISTRY/${{ secrets.GHCR_USER }}/my-app-backend \
+            --set backend.image.tag=latest \
+            --set frontend.image.repository=$REGISTRY/${{ secrets.GHCR_USER }}/my-app-frontend \
+            --set frontend.image.tag=latest \
             --namespace $NAMESPACE
