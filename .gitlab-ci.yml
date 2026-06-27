@@ -80,11 +80,11 @@ deploy:
 #        --set backend.image.tag=backend-$CI_COMMIT_SHA
 #        --set frontend.image.repository=$REGISTRY/$CI_PROJECT_PATH
 #        --set frontend.image.tag=frontend-$CI_COMMIT_SHA
-      --set backend.image.repository=$REGISTRY/$GHCR_USER/my-app-backend
-      --set backend.image.tag=latest
-      --set frontend.image.repository=$REGISTRY/$GHCR_USER/my-app-frontend
-      --set frontend.image.tag=latest
-      --namespace $NAMESPACE
+        --set backend.image.repository=$REGISTRY/$GHCR_USER/my-app-backend
+        --set backend.image.tag=latest
+        --set frontend.image.repository=$REGISTRY/$GHCR_USER/my-app-frontend
+        --set frontend.image.tag=latest
+        --namespace $NAMESPACE
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   environment:
