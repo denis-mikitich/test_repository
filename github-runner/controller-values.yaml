@@ -1,0 +1,33 @@
+github:
+  url: https://github.com
+  token: "MY_TOKEN"
+
+replicaCount: 1
+
+controller:
+  syncPeriod: 10s
+  image:
+    repository: ghcr.io/actions-runner-controller/actions-runner-controller
+    tag: latest
+    pullPolicy: IfNotPresent
+
+runner:
+  image:
+    repository: ghcr.io/actions-runner-controller/actions-runner
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    name: github-runner-sa
+    create: true
+
+  rbac:
+    create: true
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
