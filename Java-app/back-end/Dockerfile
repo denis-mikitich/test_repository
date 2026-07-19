@@ -1,6 +1,6 @@
 FROM gradle:8.5-jdk21-alpine AS build-stage
 WORKDIR /app
-COPY build.gradle settings.gradle gradle.properties ./
+COPY build.gradle settings.gradle ./
 COPY gradle/ gradle/
 COPY gradlew .
 RUN gradle dependencies --no-daemon || true
