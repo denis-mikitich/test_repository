@@ -39,7 +39,7 @@ spec:
                     sh '''
                         /kaniko/executor \
                             --context=./Java-app/back-end \
-                            --dockerfile=./Java-app/back-end/Dockerfile \
+                            --dockerfile=Dockerfile \
                             --destination=${BACKEND_IMAGE}:${TAG} \
                             --cache=true \
                             --cache-repo=${REGISTRY}/java-app-backend-cache \
@@ -55,7 +55,7 @@ spec:
                     sh '''
                         /kaniko/executor \
                             --context=./Java-app/front-end \
-                            --dockerfile=./Java-app/front-end/Dockerfile \
+                            --dockerfile=Dockerfile \
                             --destination=${FRONTEND_IMAGE}:${TAG} \
                             --cache=true \
                             --cache-repo=${REGISTRY}/java-app-frontend-cache \
