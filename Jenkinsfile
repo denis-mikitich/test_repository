@@ -33,6 +33,19 @@ spec:
             }
         }
 
+        stage('Debug') {
+            steps {
+            container('kaniko') {
+            sh '''
+                pwd
+                ls -la
+                ls -la ./Java-app/back-end/
+                cat ./Java-app/back-end/Dockerfile
+            '''
+        }
+    }
+}
+
         stage('Build Backend') {
             steps {
                 container('kaniko') {   
