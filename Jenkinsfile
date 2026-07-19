@@ -9,7 +9,7 @@ spec:
       image: jenkins/inbound-agent:latest
     - name: kaniko
       image: gcr.io/kaniko-project/executor:latest
-      command: ['/busybox/sleep', 'infinity']
+      command: ['/bin/sleep', 'infinity']
     - name: kubectl
       image: bitnami/kubectl:latest
       command: ['/bin/sleep', 'infinity']
