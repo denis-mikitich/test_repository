@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-config
+data:
+  POSTGRES_HOST: "{{ .Values.backend.postgresql.host }}"
+  POSTGRES_PORT: "{{ .Values.backend.postgresql.port }}"
+  POSTGRES_USER: "{{ .Values.backend.postgresql.user }}"
+  POSTGRES_DB: "{{ .Values.backend.postgresql.database }}"
+  REDIS_HOST: "{{ .Values.backend.redis.host }}"
+  REDIS_PORT: "{{ .Values.backend.redis.port }}"
+  FLUENTD_ENABLED: "{{ .Values.backend.fluentd.enabled }}"
+  FLUENTD_HOST: "{{ .Values.backend.fluentd.host }}"
+  FLUENTD_PORT: "{{ .Values.backend.fluentd.port }}"
+  SERVER_PORT: "{{ .Values.backend.service.port }}"
+  DEBUG: "{{ .Values.backend.debug }}"

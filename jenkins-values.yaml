@@ -1,0 +1,80 @@
+controller:
+  installPlugins:
+    - kubernetes:latest
+    - workflow-job:latest
+    - workflow-aggregator:latest
+    - git:latest
+    - docker-workflow:latest
+    - cloudbees-folder:latest
+    - blueocean:latest
+    - configuration-as-code:latest
+
+  serviceType: ClusterIP 
+
+  ingress:
+    enabled: true
+    hostName: jenkins.local
+    annotations:
+      kubernetes.io/ingress.class: traefik
+
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    size: 10Gi
+
+  resources:
+    requests:
+      memory: "2048Mi"
+      cpu: "1000m"
+    limits:
+      memory: "4096Mi"
+      cpu: "2000m"
+
+  containerEnv:
+    - name: JAVA_OPTS
+      value: "-Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85"
+
+  JCasC:
+    defaultConfig: true
+    configScripts:
+      jenkins-config: |
+        jenkins:
+          clouds:
+            - kubernetes:
+                name: "kubernetes"
+                namespace: "jenkins"
+                serverUrl: "https://kubernetes.default.svc"
+                skipTlsVerify: true
+                jenkinsUrl: "http://jenkins.jenkins.svc.cluster.local:8080"
+                templates:
+                  - name: "default-pod"
+                    label: "default-pod"
+                    yaml: |
+                      spec:
+                        containers:
+                          - name: jnlp
+                            image: jenkins/inbound-agent:latest
+                            imagePullPolicy: IfNotPresent
+                        nodeSelector:
+                          kubernetes.io/os: linux
+                podRetention: "never"
+            - name: "kaniko-pod"
+              label: "kaniko-pod"
+              yaml: |
+                spec:
+                  containers:
+                    - name: jnlp
+                      image: jenkins/inbound-agent:latest
+                      imagePullPolicy: IfNotPresent
+                    - name: kaniko
+                      image: gcr.io/kaniko-project/executor:debug
+                      imagePullPolicy: IfNotPresent
+                      command:
+                        - sleep
+                        - infinity
+                    - name: kubectl
+                      image: bitnami/kubectl:latest
+                      imagePullPolicy: IfNotPresent
+                      command:
+                        - /bin/sleep
+                        - infinity      

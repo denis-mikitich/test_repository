@@ -1,0 +1,58 @@
+replicaCount: 1
+imagePullSecrets: []
+backend:
+  image:
+    repository: registry.registry.svc.cluster.local:5000/java-app-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8081
+    targetPort: 8081
+  postgresql:
+    host: postgresql.postgres.svc.cluster.local
+    port: 5432
+    database: ci-db
+    user: postgres
+  redis:
+    host: redis-master.redis.svc.cluster.local
+    port: 6379
+  fluentd:
+    host: fluentd.fluentd.svc.cluster.local
+    enabled: true
+    port: 24224
+  debug: true
+  resources:
+    limits:
+      memory: "768Mi"
+    requests:
+      memory: "512Mi"
+
+frontend:
+  image:
+    repository: registry.registry.svc.cluster.local:5000/java-app-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    port: 80
+    targetPort: 80
+  resources:
+    limits:
+      memory: "512Mi"
+    requests:
+      memory: "256Mi"
+  
+ingress:
+  enabled: true
+  className: traefik
+  hosts:
+    - host: app.local
+      paths:
+        - path: /
+          pathType: Prefix
+          serviceName: frontend
+          servicePort: 80touch
+        - path: /api
+          pathType: Prefix
+          serviceName: backend-svc
+          servicePort: 8081
