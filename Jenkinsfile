@@ -103,12 +103,7 @@ spec:
     - name: jnlp
       image: jenkins/inbound-agent:latest
     - name: helm
-      image: bitnami/helm:latest
-      command:
-        - /bin/sleep
-        - infinity
-    - name: kubectl
-      image: bitnami/kubectl:latest
+      image: alpine/helm:3.14.0
       command:
         - /bin/sleep
         - infinity
