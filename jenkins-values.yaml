@@ -46,6 +46,7 @@ controller:
                 serverUrl: "https://kubernetes.default.svc"
                 skipTlsVerify: true
                 jenkinsUrl: "http://jenkins.jenkins.svc.cluster.local:8080"
+                jenkinsTunnel: "jenkins-agent.jenkins.svc.cluster.local:50000"
                 templates:
                   - name: "default-pod"
                     label: "default-pod"
@@ -69,8 +70,11 @@ controller:
                             image: gcr.io/kaniko-project/executor:debug
                             imagePullPolicy: IfNotPresent
                             command:
-                              - sleep
+                              - /busybox/sleep
                               - infinity
+                            env:
+                              - name: PATH
+                                value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
                           - name: kubectl
                             image: bitnami/kubectl:latest
                             imagePullPolicy: IfNotPresent

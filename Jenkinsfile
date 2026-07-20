@@ -9,7 +9,10 @@ spec:
       image: jenkins/inbound-agent:latest
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
-      command: ['sleep', 'infinity']
+      command: ['/busybox/sleep', 'infinity']
+      env:
+        - name: PATH
+        value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     - name: kubectl
       image: bitnami/kubectl:latest
       command: ['/bin/sleep', 'infinity']
@@ -32,19 +35,6 @@ spec:
                 checkout scm   
             }
         }
-
-        stage('Debug') {
-            steps {
-            container('kaniko') {
-            sh '''
-                pwd
-                ls -la
-                ls -la ./Java-app/back-end/
-                cat ./Java-app/back-end/Dockerfile
-            '''
-        }
-    }
-}
 
         stage('Build Backend') {
             steps {
