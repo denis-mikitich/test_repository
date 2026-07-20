@@ -9,7 +9,10 @@ spec:
       image: jenkins/inbound-agent:latest
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
-      command: ['/busybox/sleep', 'infinity']
+      command:
+        - /busybox/sh
+        - -c
+        - "tail -f /dev/null"
       env:
         - name: PATH
           value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
