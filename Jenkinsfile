@@ -12,7 +12,7 @@ spec:
       command: ['/busybox/sleep', 'infinity']
       env:
         - name: PATH
-        value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     - name: kubectl
       image: bitnami/kubectl:latest
       command: ['/bin/sleep', 'infinity']
