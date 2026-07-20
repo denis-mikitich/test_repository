@@ -51,7 +51,7 @@ ingress:
         - path: /
           pathType: Prefix
           serviceName: frontend
-          servicePort: 80touch
+          servicePort: 80
         - path: /api
           pathType: Prefix
           serviceName: backend-svc
