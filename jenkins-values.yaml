@@ -57,24 +57,24 @@ controller:
                             imagePullPolicy: IfNotPresent
                         nodeSelector:
                           kubernetes.io/os: linux
+                  - name: "kaniko-pod"
+                    label: "kaniko-pod"
+                    yaml: |
+                      spec:
+                        containers:
+                          - name: jnlp
+                            image: jenkins/inbound-agent:latest
+                            imagePullPolicy: IfNotPresent
+                          - name: kaniko
+                            image: gcr.io/kaniko-project/executor:debug
+                            imagePullPolicy: IfNotPresent
+                            command:
+                              - sleep
+                              - infinity
+                          - name: kubectl
+                            image: bitnami/kubectl:latest
+                            imagePullPolicy: IfNotPresent
+                            command:
+                              - /bin/sleep
+                              - infinity
                 podRetention: "never"
-            - name: "kaniko-pod"
-              label: "kaniko-pod"
-              yaml: |
-                spec:
-                  containers:
-                    - name: jnlp
-                      image: jenkins/inbound-agent:latest
-                      imagePullPolicy: IfNotPresent
-                    - name: kaniko
-                      image: gcr.io/kaniko-project/executor:debug
-                      imagePullPolicy: IfNotPresent
-                      command:
-                        - sleep
-                        - infinity
-                    - name: kubectl
-                      image: bitnami/kubectl:latest
-                      imagePullPolicy: IfNotPresent
-                      command:
-                        - /bin/sleep
-                        - infinity      

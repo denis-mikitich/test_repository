@@ -9,6 +9,6 @@ RUN gradle assemble -x test --no-daemon
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build-stage /app/build/libs/*.jar app.jar
+COPY --from=build-stage /app/build/libs/ci-back-end-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8081
 ENTRYPOINT ["java", "-Xmx512m", "-jar", "app.jar"]
