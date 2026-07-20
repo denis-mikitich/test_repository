@@ -94,16 +94,40 @@ spec:
         }
 
         stage('Deploy with Helm') {
-    agent any
+    agent {
+        kubernetes {
+            label 'helm-deploy'
+            yaml """
+spec:
+  containers:
+    - name: jnlp
+      image: jenkins/inbound-agent:latest
+    - name: helm
+      image: bitnami/helm:latest
+      command:
+        - /bin/sleep
+        - infinity
+    - name: kubectl
+      image: bitnami/kubectl:latest
+      command:
+        - /bin/sleep
+        - infinity
+"""
+        }
+    }
     steps {
         unstash 'source'
-        sh """
-            helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
-                --namespace ${NAMESPACE} --create-namespace \
-                --set backend.image.tag=${TAG} \
-                --set frontend.image.tag=${TAG} \
-                --wait
-        """
+        container('helm') {
+            script {
+                sh """
+                    helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
+                        --namespace ${NAMESPACE} --create-namespace \
+                        --set backend.image.tag=${TAG} \
+                        --set frontend.image.tag=${TAG} \
+                        --wait
+                """
+            }
+        }
     }
 }
     }
