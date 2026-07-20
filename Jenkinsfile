@@ -1,7 +1,8 @@
 pipeline {
     agent {
         kubernetes {
-            label 'kaniko-pod'   
+            label 'kaniko-pod'
+            podRetention 'always'   
             yaml """
 spec:
   containers:
@@ -10,9 +11,8 @@ spec:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
       command:
-        - /busybox/sh
-        - -c
-        - "tail -f /dev/null"
+        - /busybox/sleep
+        - infinity
       env:
         - name: PATH
           value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
