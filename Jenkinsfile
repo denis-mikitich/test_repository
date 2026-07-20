@@ -99,6 +99,7 @@ spec:
             label 'helm-deploy'
             yaml """
 spec:
+  serviceAccountName: jenkins-deploy
   containers:
     - name: jnlp
       image: jenkins/inbound-agent:latest
