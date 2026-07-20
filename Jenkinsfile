@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     environment {
         REGISTRY = 'registry.registry.svc.cluster.local:5000'
         BACKEND_IMAGE = "${REGISTRY}/java-app-backend"
