@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'kaniko-pod'
+            label 'kaniko-pod'   
             yaml """
 spec:
   containers:
@@ -17,35 +17,38 @@ spec:
           value: /busybox:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     - name: kubectl
       image: bitnami/kubectl:latest
-      command:
-        - /bin/sleep
-        - infinity
+      command: ['/bin/sleep', 'infinity']
 """
         }
     }
 
     environment {
-        REGISTRY = 'registry.registry.svc.cluster.local:5000'
+        REGISTRY = 'registry.registry.svc.cluster.local:5000'   
         BACKEND_IMAGE = "${REGISTRY}/java-app-backend"
         FRONTEND_IMAGE = "${REGISTRY}/java-app-frontend"
-        TAG = "${BUILD_NUMBER}"
-        CHART_PATH = './charts'
-        NAMESPACE = 'app'
-        RELEASE_NAME = 'java-app'
+        TAG = "${BUILD_NUMBER}"                  // уникальный тег для каждого билда (номер сборки)
+        CHART_PATH = './charts'               // путь к папке с Helm-чартом
+        NAMESPACE = 'app'                        // namespace для деплоя
+        RELEASE_NAME = 'java-app'                // имя релиза Helm
     }
-
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout scm   
             }
         }
 
         stage('Build Backend') {
             steps {
-                container('kaniko') {
+                container('kaniko') {   
                     sh '''
-                        /busybox/sh -c "/kaniko/executor --context=./Java-app/back-end --dockerfile=Dockerfile --destination=${BACKEND_IMAGE}:${TAG} --cache=true --cache-repo=${REGISTRY}/java-app-backend-cache --use-new-run"
+                        /kaniko/executor \
+                            --context=./Java-app/back-end \
+                            --dockerfile=Dockerfile \
+                            --destination=${BACKEND_IMAGE}:${TAG} \
+                            --cache=true \
+                            --cache-repo=${REGISTRY}/java-app-backend-cache \
+                            --use-new-run
                     '''
                 }
             }
@@ -55,7 +58,13 @@ spec:
             steps {
                 container('kaniko') {
                     sh '''
-                        /busybox/sh -c "/kaniko/executor --context=./Java-app/front-end --dockerfile=Dockerfile --destination=${FRONTEND_IMAGE}:${TAG} --cache=true --cache-repo=${REGISTRY}/java-app-frontend-cache --use-new-run"
+                        /kaniko/executor \
+                            --context=./Java-app/front-end \
+                            --dockerfile=Dockerfile \
+                            --destination=${FRONTEND_IMAGE}:${TAG} \
+                            --cache=true \
+                            --cache-repo=${REGISTRY}/java-app-frontend-cache \
+                            --use-new-run
                     '''
                 }
             }
