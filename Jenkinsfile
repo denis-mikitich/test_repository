@@ -117,7 +117,7 @@ spec:
             script {
                 sh """
                     helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
-                        --namespace ${NAMESPACE} --create-namespace \
+                        --namespace ${NAMESPACE} \
                         --set backend.image.tag=${TAG} \
                         --set frontend.image.tag=${TAG} \
                         --wait
