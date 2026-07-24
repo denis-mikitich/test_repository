@@ -48,11 +48,11 @@ ingress:
   hosts:
     - host: app.local
       paths:
+        - path: /api
+          pathType: Prefix
+          serviceName: backend
+          servicePort: 8081
         - path: /
           pathType: Prefix
           serviceName: frontend
           servicePort: 80
-        - path: /api
-          pathType: Prefix
-          serviceName: backend-svc
-          servicePort: 8081
