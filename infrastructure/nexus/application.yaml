@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nexus
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: ghcr.io/stevehipwell/helm-charts
+      chart: nexus3
+      targetRevision: 5.25.1
+      helm:
+        valueFiles:
+          - $values/infrastructure/nexus/values.yaml
+    - repoURL: https://github.com/denis-mikitich/test_repository.git
+      targetRevision: test-task
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nexus
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
