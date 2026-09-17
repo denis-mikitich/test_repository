@@ -7,6 +7,10 @@ persistence:
 service:
   type: ClusterIP
   port: 8081
+  additionalPorts:
+    - port: 8083
+      name: docker-hosted
+      containerPort: 8083
 ingress:
   enabled: false
 chownDataDir: true
