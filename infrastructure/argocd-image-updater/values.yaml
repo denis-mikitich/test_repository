@@ -1,2 +1,10 @@
 config:
   logLevel: info
+
+  registries:
+    - name: Nexus
+      api_url: http://192.168.100.14:30083
+      prefix: 192.168.100.14:30083
+      ping: yes
+      insecure: yes
+      credentials: secret:argocd/nexus-registry#creds
