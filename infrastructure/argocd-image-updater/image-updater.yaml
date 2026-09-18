@@ -1,0 +1,18 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: test-app
+  namespace: argocd
+spec:
+  writeBackConfig:
+    method: git
+    gitConfig:
+      branch: test-task
+      writeBackTarget: helmvalues:/apps/test-app/values.yaml
+
+  applicationRefs:
+    - namePattern: test-app
+
+      images:
+        - alias: nginx
+          imageName: 192.168.100.14:30083/test/nginx:1.0.0
