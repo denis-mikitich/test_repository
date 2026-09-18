@@ -15,6 +15,9 @@ spec:
     - repoURL: https://github.com/denis-mikitich/test_repository.git
       targetRevision: test-task
       ref: values
+    - repoURL: https://github.com/denis-mikitich/test_repository.git
+      targetRevision: test-task
+      path: infrastructure/argocd-image-updater
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
