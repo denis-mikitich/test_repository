@@ -12,6 +12,8 @@ spec:
       labels:
         app: test-app
     spec:
+      imagePullSecrets:
+        - name: nexus-registry
       containers:
         - name: nginx
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
