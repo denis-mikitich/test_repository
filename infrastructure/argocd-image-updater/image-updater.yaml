@@ -4,6 +4,9 @@ metadata:
   name: test-app
   namespace: argocd
 spec:
+  commonUpdateSettings:
+    updateStrategy: semver
+    
   writeBackConfig:
     method: git
     gitConfig:
