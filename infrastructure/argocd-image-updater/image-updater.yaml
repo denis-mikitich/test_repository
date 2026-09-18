@@ -8,7 +8,7 @@ spec:
     updateStrategy: semver
 
   writeBackConfig:
-    method: git
+    method: git:secret:github-repo-credentials
     gitConfig:
       branch: test-task
       writeBackTarget: helmvalues:/apps/test-app/values.yaml
