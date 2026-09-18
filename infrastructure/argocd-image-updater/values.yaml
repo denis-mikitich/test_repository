@@ -1,5 +1,6 @@
 config:
-  logLevel: debug
+  log:
+    level: debug
 
   registries:
     - name: Nexus
