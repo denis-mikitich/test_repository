@@ -6,7 +6,7 @@ metadata:
 spec:
   commonUpdateSettings:
     updateStrategy: semver
-    
+
   writeBackConfig:
     method: git
     gitConfig:
@@ -18,4 +18,4 @@ spec:
 
       images:
         - alias: nginx
-          imageName: 192.168.100.14:30083/test/nginx:1.0.0
+          imageName: 192.168.100.14:30083/test/nginx:~1.0.0
