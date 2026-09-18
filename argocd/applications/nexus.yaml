@@ -18,6 +18,10 @@ spec:
       targetRevision: test-task
       ref: values
 
+    - repoURL: https://github.com/denis-mikitich/test_repository.git
+      targetRevision: test-task
+      path: infrastructure/nexus
+
   destination:
     server: https://kubernetes.default.svc
     namespace: nexus
