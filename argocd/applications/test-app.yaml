@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-app
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/denis-mikitich/test_repository.git
+    targetRevision: test-task
+    path: apps/test-app
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: test-app
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
