@@ -21,5 +21,4 @@ spec:
           imageName: 192.168.100.14:30083/test/ci-frontend:~1.0.0
           manifestTargets:
             helm:
-              name: frontend.image.repository
               tag: frontend.image.tag
