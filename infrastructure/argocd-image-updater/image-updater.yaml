@@ -1,7 +1,7 @@
 apiVersion: argocd-image-updater.argoproj.io/v1alpha1
 kind: ImageUpdater
 metadata:
-  name: test-app
+  name: java-app
   namespace: argocd
 spec:
   commonUpdateSettings:
@@ -11,11 +11,11 @@ spec:
     method: git:secret:github-repo-credentials
     gitConfig:
       branch: test-task
-      writeBackTarget: helmvalues:/apps/test-app/values.yaml
+      writeBackTarget: helmvalues:/apps/java-app/values.yaml
 
   applicationRefs:
-    - namePattern: test-app
+    - namePattern: java-app
 
       images:
-        - alias: nginx
-          imageName: 192.168.100.14:30083/test/nginx:~1.0.0
+        - alias: frontend
+          imageName: 192.168.100.14:30083/test/ci-frontend:~1.0.0
