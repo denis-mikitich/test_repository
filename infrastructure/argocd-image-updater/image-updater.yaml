@@ -19,6 +19,3 @@ spec:
       images:
         - alias: frontend
           imageName: 192.168.100.14:30083/test/ci-frontend:~1.0.0
-          manifestTargets:
-            helm:
-              tag: frontend.image.tag
