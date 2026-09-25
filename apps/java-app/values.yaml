@@ -34,7 +34,7 @@ backend:
       memory: 768Mi
 frontend:
   image:
-    repository: test/ci-frontend
+    repository: ci-frontend
     tag: "1.0.1"
     pullPolicy: IfNotPresent
   service:
