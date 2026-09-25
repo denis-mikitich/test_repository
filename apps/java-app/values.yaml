@@ -64,3 +64,4 @@ ingress:
       servicePort: 80
 image:
   name: 192.168.100.14:30083/test/ci-frontend
+  tag: 1.0.1
