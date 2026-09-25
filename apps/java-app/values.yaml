@@ -1,6 +1,6 @@
 replicaCount: 1
 imagePullSecrets:
-  - name: nexus-registry
+- name: nexus-registry
 registry:
   host: "192.168.100.14:30083/test"
 backend:
@@ -62,4 +62,3 @@ ingress:
       pathType: Prefix
       serviceName: frontend
       servicePort: 80
-
