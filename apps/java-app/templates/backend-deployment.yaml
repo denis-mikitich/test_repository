@@ -33,10 +33,10 @@ spec:
                 secretKeyRef:
                   name: postgresql-credentials
                   key: password
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-backend-secret
-                  key: REDIS_PASSWORD
+#            - name: REDIS_PASSWORD
+ #             valueFrom:
+ #               secretKeyRef:
+ #                 name: {{ .Release.Name }}-backend-secret
+#                  key: REDIS_PASSWORD
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
