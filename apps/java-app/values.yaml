@@ -5,7 +5,7 @@ registry:
   host: "192.168.100.14:30083/test"
 backend:
   image:
-    repository: ci-backend
+    name: "192.168.100.14:30083/test/ci-backend"
     tag: "1.0.0"
     pullPolicy: IfNotPresent
   service:

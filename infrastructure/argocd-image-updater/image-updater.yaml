@@ -15,7 +15,8 @@ spec:
 
   applicationRefs:
     - namePattern: java-app
-
       images:
         - alias: frontend
           imageName: 192.168.100.14:30083/test/ci-frontend:~1.0.0
+        - alias: backend
+          imageName: 192.168.100.14:30083/test/ci-backend:~1.0.0 
